@@ -4,7 +4,6 @@
 
 - Lucas Lucas Caroline
 
-
 ## Documentacion del taller
 
 ### Crear repositorio
