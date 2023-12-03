@@ -10,4 +10,4 @@
 ## Documentacion del taller
 
 ### Definir la estructura de la entidad
-Mensaje de prueba 
+Mensaje de prueba 2
