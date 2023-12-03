@@ -1,28 +1,30 @@
-
-FROM node:19-alpine3.15 as deps
+# Etapa para instalación de dependencias de desarrollo
+FROM node:19-alpine3.15 as dev-deps
 WORKDIR /app
-COPY package.json package.json
+COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-
-FROM node:19-alpine3.15 as builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Etapa de construcción
+FROM dev-deps as builder
 COPY . .
-# RUN yarn test
 RUN yarn build
 
+# Etapa para instalación de dependencias de producción
 FROM node:19-alpine3.15 as prod-deps
 WORKDIR /app
-COPY package.json package.json
+COPY --from=builder /app/package.json /app/yarn.lock ./
 RUN yarn install --prod --frozen-lockfile
+RUN yarn cache clean
 
-
+# Etapa de producción
 FROM node:19-alpine3.15 as prod
 EXPOSE 3000
 WORKDIR /app
-ENV APP_VERSION=${APP_VERSION}
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
-CMD [ "node","dist/main.js"]
+# Configuración de la variable de entorno
+ARG APP_VERSION
+ENV APP_VERSION=${APP_VERSION}
+
+CMD ["node", "dist/main.js"]
