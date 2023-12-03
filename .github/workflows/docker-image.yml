@@ -38,15 +38,15 @@ jobs:
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t carol018/docker-graphql_rest:$NEW_VERSION 
-        docker build -t carol018/docker-graphql_rest:latest
+        docker build -t carol018/docker-graphql:$NEW_VERSION .
+        docker build -t carol018/docker-graphql:latest .
         
     - name: Push Docker Image
       env:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker push carol018/docker-graphql_rest:$NEW_VERSION
-        docker push carol018/docker-graphql_rest:latest
+        docker push carol018/docker-graphql:$NEW_VERSION
+        docker push carol018/docker-graphql:latest
       
     
     
